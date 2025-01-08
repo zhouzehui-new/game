@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-fnpsjx-9&z=ec^ti%7ghqmllsifsjiu6fz5(ux9yl+yt80vskk'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = ['*']  # 在实际生产环境中应该设置为具体的域名
 
