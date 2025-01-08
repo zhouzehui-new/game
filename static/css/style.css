@@ -1,0 +1,80 @@
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #faf8ef;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    width: 400px;
+    text-align: center;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    border-radius: 10px;
+    background-color: #fff;
+    padding: 20px;
+}
+
+h1 {
+    font-size: 2.5em;
+    margin: 0;
+    color: #776e65;
+}
+
+.score {
+    font-size: 1.5em;
+    margin: 20px 0;
+    color: #776e65;
+}
+
+.grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 10px;
+    background: #bbada0;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+.cell {
+    width: 80px;
+    height: 80px;
+    background: rgba(238, 228, 218, 0.35);
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 24px;
+    font-weight: bold;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+.cell[data-value="2"] { background: #eee4da; }
+.cell[data-value="4"] { background: #ede0c8; }
+.cell[data-value="8"] { background: #f2b179; color: white; }
+.cell[data-value="16"] { background: #f59563; color: white; }
+.cell[data-value="32"] { background: #f67c5f; color: white; }
+.cell[data-value="64"] { background: #f65e3b; color: white; }
+.cell[data-value="128"] { background: #edcf72; color: white; }
+.cell[data-value="256"] { background: #edcc61; color: white; }
+.cell[data-value="512"] { background: #edc850; color: white; }
+.cell[data-value="1024"] { background: #edc53f; color: white; }
+.cell[data-value="2048"] { background: #edc22e; color: white; }
+
+button {
+    background-color: #8f7a66;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    padding: 10px 20px;
+    font-size: 1.2em;
+    cursor: pointer;
+    transition: background-color 0.3s;
+    margin-top: 20px;
+}
+
+button:hover {
+    background-color: #b3a99c;
+}
