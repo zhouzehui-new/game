@@ -198,6 +198,56 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
+    // 触摸控制
+    let touchStartX = 0;
+    let touchStartY = 0;
+    let touchEndX = 0;
+    let touchEndY = 0;
+
+    document.addEventListener('touchstart', (e) => {
+        touchStartX = e.touches[0].clientX;
+        touchStartY = e.touches[0].clientY;
+    }, false);
+
+    document.addEventListener('touchmove', (e) => {
+        e.preventDefault(); // 防止页面滚动
+    }, { passive: false });
+
+    document.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].clientX;
+        touchEndY = e.changedTouches[0].clientY;
+
+        const deltaX = touchEndX - touchStartX;
+        const deltaY = touchEndY - touchStartY;
+        const minSwipeDistance = 50; // 最小滑动距离
+
+        // 判断滑动方向
+        if (Math.abs(deltaX) > Math.abs(deltaY)) {
+            // 水平滑动
+            if (Math.abs(deltaX) > minSwipeDistance) {
+                if (deltaX > 0) {
+                    game.move('ArrowRight');
+                } else {
+                    game.move('ArrowLeft');
+                }
+            }
+        } else {
+            // 垂直滑动
+            if (Math.abs(deltaY) > minSwipeDistance) {
+                if (deltaY > 0) {
+                    game.move('ArrowDown');
+                } else {
+                    game.move('ArrowUp');
+                }
+            }
+        }
+
+        // 检查游戏是否结束
+        if (game.isGameOver()) {
+            alert('游戏结束！最终得分：' + game.score);
+        }
+    }, false);
+
     // 新游戏按钮
     document.getElementById('new-game').addEventListener('click', () => {
         game.init();
