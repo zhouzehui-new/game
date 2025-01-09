@@ -42,14 +42,20 @@ class Game2048 {
             cell.addEventListener('animationend', () => {
                 cell.classList.remove('pop');
             }, { once: true });
-        }, 50);
+        }, 150); // 增加延迟，让动画更明显
     }
 
     addMergeAnimation(row, col) {
         const cells = document.querySelectorAll('.cell');
         const index = row * 4 + col;
         const cell = cells[index];
+        
+        // 添加高亮效果
+        const value = this.grid[row][col];
+        const originalColor = cell.style.backgroundColor;
+        
         cell.classList.add('merge');
+        
         cell.addEventListener('animationend', () => {
             cell.classList.remove('merge');
         }, { once: true });
@@ -57,6 +63,7 @@ class Game2048 {
 
     updateView() {
         const gridElement = document.querySelector('.grid');
+        const oldGrid = gridElement.innerHTML; // 保存旧的网格状态
         gridElement.innerHTML = '';
         
         for (let i = 0; i < 4; i++) {
@@ -69,7 +76,10 @@ class Game2048 {
                     cell.setAttribute('data-value', value);
                     // 如果这个单元格是刚刚合并的，添加合并动画
                     if (this.mergedCells.has(`${i},${j}`)) {
-                        this.addMergeAnimation(i, j);
+                        // 使用requestAnimationFrame确保动画正确触发
+                        requestAnimationFrame(() => {
+                            this.addMergeAnimation(i, j);
+                        });
                     }
                 }
                 gridElement.appendChild(cell);
