@@ -2,6 +2,7 @@ class Game2048 {
     constructor() {
         this.grid = Array(4).fill().map(() => Array(4).fill(0));
         this.score = 0;
+        this.mergedCells = new Set(); // 跟踪合并的单元格
         this.init();
     }
 
@@ -27,7 +28,31 @@ class Game2048 {
         if (emptyCells.length > 0) {
             const {x, y} = emptyCells[Math.floor(Math.random() * emptyCells.length)];
             this.grid[x][y] = Math.random() < 0.9 ? 2 : 4;
+            // 为新数字添加弹出动画
+            this.addPopAnimation(x, y);
         }
+    }
+
+    addPopAnimation(row, col) {
+        setTimeout(() => {
+            const cells = document.querySelectorAll('.cell');
+            const index = row * 4 + col;
+            const cell = cells[index];
+            cell.classList.add('pop');
+            cell.addEventListener('animationend', () => {
+                cell.classList.remove('pop');
+            }, { once: true });
+        }, 50);
+    }
+
+    addMergeAnimation(row, col) {
+        const cells = document.querySelectorAll('.cell');
+        const index = row * 4 + col;
+        const cell = cells[index];
+        cell.classList.add('merge');
+        cell.addEventListener('animationend', () => {
+            cell.classList.remove('merge');
+        }, { once: true });
     }
 
     updateView() {
@@ -42,18 +67,24 @@ class Game2048 {
                 if (value > 0) {
                     cell.textContent = value;
                     cell.setAttribute('data-value', value);
+                    // 如果这个单元格是刚刚合并的，添加合并动画
+                    if (this.mergedCells.has(`${i},${j}`)) {
+                        this.addMergeAnimation(i, j);
+                    }
                 }
                 gridElement.appendChild(cell);
             }
         }
         
+        // 清空合并单元格集合
+        this.mergedCells.clear();
         document.getElementById('score').textContent = this.score;
     }
 
     // 移动逻辑
     move(direction) {
         let moved = false;
-        const oldGrid = JSON.stringify(this.grid);
+        this.mergedCells.clear(); // 清空之前的合并记录
 
         switch(direction) {
             case 'ArrowUp': moved = this.moveUp(); break;
@@ -78,6 +109,8 @@ class Game2048 {
                     row[j] *= 2;
                     this.score += row[j];
                     row.splice(j + 1, 1);
+                    // 记录合并的单元格
+                    this.mergedCells.add(`${i},${j}`);
                 }
             }
             const newRow = row.concat(Array(4 - row.length).fill(0));
@@ -98,6 +131,8 @@ class Game2048 {
                     row[j] *= 2;
                     this.score += row[j];
                     row.splice(j - 1, 1);
+                    // 记录合并的单元格
+                    this.mergedCells.add(`${i},${j}`);
                 }
             }
             const newRow = Array(4 - row.length).fill(0).concat(row);
@@ -122,6 +157,8 @@ class Game2048 {
                     column[i] *= 2;
                     this.score += column[i];
                     column.splice(i + 1, 1);
+                    // 记录合并的单元格
+                    this.mergedCells.add(`${i},${j}`);
                 }
             }
             column = column.concat(Array(4 - column.length).fill(0));
@@ -148,6 +185,8 @@ class Game2048 {
                     column[i] *= 2;
                     this.score += column[i];
                     column.splice(i - 1, 1);
+                    // 记录合并的单元格
+                    this.mergedCells.add(`${i},${j}`);
                 }
             }
             column = Array(4 - column.length).fill(0).concat(column);
